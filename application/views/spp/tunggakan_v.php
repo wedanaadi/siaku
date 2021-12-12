@@ -69,6 +69,12 @@ $this->load->view('_partials/header');
                   <input type="radio" name="value" value="pay2" class="selectgroup-input">
                   <span class="selectgroup-button">Bayar dengan Tabungan</span>
                 </label>
+                <?php if ($this->session->userdata('jabatan') === 'admin') : ?>
+                  <label class="selectgroup-item">
+                    <input type="radio" name="value" value="pay3" class="selectgroup-input">
+                    <span class="selectgroup-button">Tunai</span>
+                  </label>
+                <?php endif; ?>
               </div>
             </div>
             <div class="form-group">
@@ -256,6 +262,10 @@ $this->load->view('_partials/header');
       $('[name=noref]').val('Bayar dari tabungan');
       $('[name=noref]').attr('disabled', true);
       $('.fotog').css("display", "none");
+    } else {
+      $('[name=noref]').val('Tunai');
+      $('[name=noref]').attr('disabled', true);
+      $('.fotog').css("display", "none");
     }
   });
 
@@ -268,6 +278,12 @@ $this->load->view('_partials/header');
       $('#submit').removeClass('disabled btn-progress');
     } else {
       const buktifoto = $('[name=foto]').prop('files')[0];
+      const dataFoto = typeof buktifoto != 'undefined' ? true : false;
+      if (!dataFoto && $('[name=value]:checked').val() === 'pay1') {
+        alert('Bukti pembayaran tolong diisi!');
+        $('#submit').removeClass('disabled btn-progress');
+        return false;
+      }
       let formdata = new FormData();
       formdata.append('foto', buktifoto);
       formdata.append('pilih', $('[name=value]:checked').val());
