@@ -170,7 +170,7 @@ $this->load->view('_partials/header');
           periode
         },
         success: function(respon) {
-          $('#label').text("Laporan Buku Besar " + respon.bulanth);
+          $('#label').text("Laporan Rekap Bulan " + respon.bulanth);
           tabel.clear().draw();
           $('#grandtotal').text(0);
           var masuk = 0;
