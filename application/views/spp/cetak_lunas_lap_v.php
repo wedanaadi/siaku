@@ -30,6 +30,7 @@ $this->load->helper('Tanggal'); ?>
       <th>Bulan Pembayaran</th>
       <th>Tahun Ajaran</th>
       <th>Jumlah</th>
+      <th>Keterangan</th>
     </tr>
   </thead>
   <tbody>
@@ -47,6 +48,7 @@ $this->load->helper('Tanggal'); ?>
         <td><?= bln_th($row->tgl) ?></td>
         <td><?= $row->tahun_ajaran; ?></td>
         <td><?= number_format($row->jumlah, '0', ',', '.'); ?></td>
+        <td><?= $row->noref; ?></td>
       </tr>
     <?php
       $no++;
@@ -60,6 +62,7 @@ $this->load->helper('Tanggal'); ?>
     <tr>
       <td colspan="4"><strong>TOTAL</strong></td>
       <td><?= number_format($saldo, '0', ',', '.') ?></td>
+      <td>&nbsp;</td>
     </tr>
   </tfoot>
 </table>

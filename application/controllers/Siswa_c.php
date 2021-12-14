@@ -95,6 +95,17 @@ class Siswa_c extends CI_Controller
         }
     }
 
+    public function cekDuplicateNIS()
+    {
+        $inputNIS = $this->input->get('NIS');
+        $check = $this->db->query("SELECT * FROM siswa WHERE NIS='$inputNIS' AND is_aktif='1'")->num_rows();
+        if ($check > 0) {
+            echo json_encode(['status' => false]);
+        } else {
+            echo json_encode(['status' => true]);
+        }
+    }
+
     public function update($id)
     {
         $config['upload_path']          = "assets/img/foto/";

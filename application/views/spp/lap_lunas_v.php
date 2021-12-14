@@ -54,6 +54,7 @@ $this->load->view('_partials/header');
                       <th>Bulan Pembayaran</th>
                       <th>Tahun Ajaran</th>
                       <th>Jumlah</th>
+                      <th>Keterangan</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -71,7 +72,7 @@ $this->load->view('_partials/header');
                         <td><?= bln_th($row->tgl) ?></td>
                         <td><?= $row->tahun_ajaran; ?></td>
                         <td><?= $row->jumlah; ?></td>
-                        <!-- <td><?= $row->bulan; ?></td> -->
+                        <td><?= $row->noref; ?></td>
                       </tr>
                     <?php
                       $no++;
@@ -269,6 +270,7 @@ $this->load->view('_partials/header');
               month[datedb[1]] + ' ' + datedb[0],
               v.tahun_ajaran,
               v.jumlah,
+              v.noref,
             ]).draw();
           });
           setTimeout(function() {

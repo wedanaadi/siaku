@@ -26,7 +26,7 @@ $this->load->view('_partials/header');
                 </div>
                 <div class="form-group grupuang">
                   <label>Jumlah</label>
-                  <input type="text" name="jumlah" class="form-control formuang" required="" value="<?= $jumlah_setting ?>">
+                  <input type="text" name="jumlah" class="form-control formuang" required="" value="<?= $jumlah_setting ?>" readonly>
                   <div class="invalid-feedback">
                     Jumlah Tagihan ?
                   </div>

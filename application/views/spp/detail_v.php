@@ -312,6 +312,19 @@ $this->load->view('_partials/header');
                 Terisi!
               </div>
             </div>
+            <div class="form-group bankg">
+              <label>Bank</label>
+              <select name="bank" class="form-control" required="">
+                <option value="BPD">BPD</option>
+                <option value="BRI">BRI</option>
+              </select>
+              <div class="invalid-feedback">
+                Bank ?
+              </div>
+              <div class="valid-feedback">
+                Terisi!
+              </div>
+            </div>
             <div class="form-group">
               <label>Jumlah Tagihan</label>
               <input type="text" name="jmtagihan" class="form-control formuang" required="">
@@ -429,14 +442,17 @@ $this->load->view('_partials/header');
       $('[name=noref]').val('');
       $('[name=noref]').attr('disabled', false);
       $('.fotog').css("display", "block");
+      $('.bankg').css("display", "block");
     } else if (this.value == 'pay2') {
       $('[name=noref]').val('Bayar dari tabungan');
       $('[name=noref]').attr('disabled', true);
       $('.fotog').css("display", "none");
+      $('.bankg').css("display", "none");
     } else {
       $('[name=noref]').val('Tunai');
       $('[name=noref]').attr('disabled', true);
       $('.fotog').css("display", "none");
+      $('.bankg').css("display", "none");
     }
   });
 
@@ -459,6 +475,7 @@ $this->load->view('_partials/header');
       formdata.append('foto', buktifoto);
       formdata.append('pilih', $('[name=value]:checked').val());
       formdata.append('noref', $('[name=noref]').val());
+      formdata.append('bank', $('[name=bank]').val());
       formdata.append('bayar', $('[name=jmtagihan]').val());
       formdata.append('nis', "<?= $info['NIS'] ?>");
       $.ajax({

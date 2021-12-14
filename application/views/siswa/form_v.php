@@ -164,11 +164,6 @@
 
 <script type="text/javascript">
   $(function() {
-    // $('#waktu').datetimepicker({
-    //   // useCurrent: false,
-    //   format: 'YYYY-MM-DD',
-    //   // debug: true
-    // });
     $('#waktu').daterangepicker({
       locale: {
         format: 'YYYY-MM-DD'
@@ -200,6 +195,21 @@
       $('.select2-selection').css('border-color', '#28a745');
     });
 
-
+    // cek NIS sudah ada
+    $('[name=nis]').on('input', function(e) {
+      $.ajax({
+        method: "GET",
+        url: "<?= base_url() ?>/Siswa_c/cekDuplicateNIS",
+        dataType: "JSON",
+        data: {
+          NIS: e.target.value
+        },
+        success: function(respon) {
+          if (!respon.status) {
+            alert('NIS sudah digunakan!');
+          }
+        }
+      })
+    });
   });
 </script>

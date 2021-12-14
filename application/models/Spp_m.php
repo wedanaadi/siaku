@@ -179,7 +179,9 @@ class Spp_m extends CI_Model
       $lanjut = '';
     }
 
-    $sql = "SELECT spp.NIS, s.`nama_siswa`, CONCAT(YEAR(`tgl_trx`),'-',bulan) AS 'tgl', bulan, jumlah, ta.`tahun_ajaran`, k.`nama_kelompok` FROM spp
+    $sql = "SELECT spp.NIS, s.`nama_siswa`, CONCAT(YEAR(`tgl_trx`),'-',bulan) AS 'tgl', bulan, jumlah, 
+            ta.`tahun_ajaran`, k.`nama_kelompok`, spp.`noref`
+            FROM spp
             INNER JOIN siswa s ON s.`NIS` = spp.`NIS`
             INNER JOIN tahun_ajaran ta ON ta.`id` = spp.`tahun_ajaran` 
             INNER JOIN kelompok k ON k.`id` = s.`id_kelompok`

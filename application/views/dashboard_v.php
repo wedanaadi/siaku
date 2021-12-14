@@ -16,6 +16,39 @@ $this->load->view('_partials/header');
 
     <div class="section-body">
       <?php if ($this->session->userdata('jabatan') !== 'siswa') : ?>
+        <div class="row d-flex justify-content-lg-around">
+          <div class="col-4">
+            <div class="card card-statistic-1 bg-primary">
+              <div class="card-icon">
+                <i class="fas fa-user-graduate"></i>
+              </div>
+              <div class="card-wrap">
+                <div class="card-header">
+                  <h4 class="text-white">Jumlah Siswa Aktif</h4>
+                </div>
+                <div class="card-body text-white">
+                  <?= $cSiswa; ?>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="card card-statistic-1 bg-primary">
+              <div class="card-icon">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div class="card-wrap">
+                <div class="card-header">
+                  <h4 class="text-white">Jumlah User</h4>
+                </div>
+                <div class="card-body text-white">
+                  <?= $cUser; ?>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-12">
             <div class="card card-primary">
@@ -29,47 +62,65 @@ $this->load->view('_partials/header');
                 <div class="card-body">
 
                   <div class="row">
-                    <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                    <div class="col-12">
                       <div class="card card-statistic-1 bg-danger">
                         <div class="card-icon">
                           <i class="fas fa-shopping-basket"></i>
                         </div>
                         <div class="card-wrap">
-                          <div class="card-header">
-                            <h4 class="text-white">Pengeluaran Bulan <?= bln_th(date('Y-m')) ?></h4>
-                          </div>
                           <div class="card-body text-white">
-                            <?= number_format($cPengeluaran, '0', ',', '.') ?>
+                            <div class="d-flex justify-content-between mt-3">
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Pengeluaran Bulan <?= bln_th(date('Y-m')) ?> : </h4>
+                                <h4><?= number_format($cPengeluaran['bulanini'], '0', ',', '.') ?></h4>
+                              </div>
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Pengeluaran Tahun <?= date('Y') ?> ( Januari <?= date('Y') ?> - Desembar <?= date('Y') ?> ) : </h4>
+                                <h4><?= number_format($cPengeluaran['thn'], '0', ',', '.') ?></h4>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                    <div class="col-12">
                       <div class="card card-statistic-1 bg-warning">
                         <div class="card-icon">
                           <i class="fas fa-money-check-alt"></i>
                         </div>
                         <div class="card-wrap">
-                          <div class="card-header">
-                            <h4 class="text-white">Saldo s/d bulan <?= bln_th(date('Y-m')) ?></h4>
-                          </div>
                           <div class="card-body text-white">
-                            <?= number_format($cSaldo, '0', ',', '.') ?>
+                            <div class="d-flex justify-content-between mt-3">
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Saldo Bulan <?= bln_th(date('Y-m')) ?> : </h4>
+                                <h4><?= number_format($cSaldo['bulanini'], '0', ',', '.') ?></h4>
+                              </div>
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Saldo Sampai Bulan <?= bln_th(date('Y-m')) ?> : </h4>
+                                <h4><?= number_format($cSaldo['periode'], '0', ',', '.') ?></h4>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                    <div class="col-12">
                       <div class="card card-statistic-1 bg-success">
                         <div class="card-icon">
                           <i class="fas fa-exchange-alt"></i>
                         </div>
                         <div class="card-wrap">
-                          <div class="card-header">
-                            <h4 class="text-white">Penerimaan SPP Bulan <?= bln_th(date('Y-m')) ?></h4>
-                          </div>
                           <div class="card-body text-white">
-                            <?= number_format($cSpp, '0', ',', '.') ?>
+                            <div class="d-flex justify-content-between mt-3">
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Penerimaan SPP Bulan <?= bln_th(date('Y-m')) ?> : </h4>
+                                <h4><?= number_format($cSpp['bulanini'], '0', ',', '.') ?></h4>
+                              </div>
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Penerimaan SPP Tahun <?= date('Y') ?> ( Januari <?= date('Y') ?> - Desember <?= date('Y') ?> ) : </h4>
+                                <h4><?= number_format($cSpp['thn'], '0', ',', '.') ?></h4>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -108,21 +159,6 @@ $this->load->view('_partials/header');
               <div class="collapse show" id="mycard-collapse2">
                 <div class="card-body">
                   <div class="row">
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                      <div class="card card-statistic-1 bg-primary">
-                        <div class="card-icon">
-                          <i class="far fa-user"></i>
-                        </div>
-                        <div class="card-wrap">
-                          <div class="card-header">
-                            <h4 class="text-white">Jumlah Siswa Aktif</h4>
-                          </div>
-                          <div class="card-body text-white">
-                            <?= $cSiswa; ?>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <?php
                     $select = $this->db->query("SELECT * FROM `sistem`
                               INNER JOIN `tahun_ajaran` ta ON ta.`id` = sistem.`tahun_ajaran_aktif`");
@@ -138,47 +174,65 @@ $this->load->view('_partials/header');
                       $date = $tasplit[0] . '-' . $i;
                     }
                     ?>
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                    <div class="col-12">
                       <div class="card card-statistic-1 bg-danger">
                         <div class="card-icon">
                           <i class="fas fa-shopping-basket"></i>
                         </div>
                         <div class="card-wrap">
-                          <div class="card-header">
-                            <h4 class="text-white">Pengeluaran Bulan <?= bln_th($date) ?></h4>
-                          </div>
                           <div class="card-body text-white">
-                            <?= number_format($cPengeluaran2, '0', ',', '.') ?>
+                            <div class="d-flex justify-content-between mt-3">
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Pengeluaran Bulan <?= bln_th($date) ?> : </h4>
+                                <h4><?= number_format($cPengeluaran2['bulanini'], '0', ',', '.') ?></h4>
+                              </div>
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Pengeluaran Tahun Ajaran <?= $ta_aktif ?> ( Juli <?= $tasplit[0] ?> - Juni <?= $tasplit[1] ?> ) : </h4>
+                                <h4><?= number_format($cPengeluaran2['thn'], '0', ',', '.') ?></h4>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                    <div class=" col-12">
                       <div class="card card-statistic-1 bg-warning">
                         <div class="card-icon">
                           <i class="fas fa-money-check-alt"></i>
                         </div>
                         <div class="card-wrap">
-                          <div class="card-header">
-                            <h4 class="text-white">Saldo s/d bulan <?= bln_th($date) ?></h4>
-                          </div>
                           <div class="card-body text-white">
-                            <?= number_format($cSaldo2, '0', ',', '.') ?>
+                            <div class="d-flex justify-content-between mt-3">
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Saldo Bulan <?= bln_th($date) ?> : </h4>
+                                <h4><?= number_format($cSaldo2['bulanini'], '0', ',', '.') ?></h4>
+                              </div>
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Saldo Sampai Bulan <?= bln_th($date) ?> : </h4>
+                                <h4><?= number_format($cSaldo2['sampaibulan'], '0', ',', '.') ?></h4>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                    <div class="col-12">
                       <div class="card card-statistic-1 bg-success">
                         <div class="card-icon">
                           <i class="fas fa-exchange-alt"></i>
                         </div>
                         <div class="card-wrap">
-                          <div class="card-header">
-                            <h4 class="text-white">Penerimaan SPP Bulan <?= bln_th($date) ?></h4>
-                          </div>
                           <div class="card-body text-white">
-                            <?= number_format($cSpp2, '0', ',', '.') ?>
+                            <div class="d-flex justify-content-between mt-3">
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Penerimaan SPP Bulan <?= bln_th($date) ?> : </h4>
+                                <h4><?= number_format($cSpp2['bulanini'], '0', ',', '.') ?></h4>
+                              </div>
+                              <div class="p-2">
+                                <h4 style="font-size: 13px">Penerimaan SPP Tahun Ajaran <?= $ta_aktif ?> ( Juli <?= $tasplit[0] ?> - Juni <?= $tasplit[1] ?> ) : </h4>
+                                <h4><?= number_format($cSpp2['ta'], '0', ',', '.') ?></h4>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -205,8 +259,8 @@ $this->load->view('_partials/header');
 
 
       <?php if ($this->session->userdata('jabatan') === 'siswa') : ?>
-        <div class="row">
-          <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+        <div class="row d-flex justify-content-around">
+          <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <div class="card card-statistic-1 bg-danger">
               <div class="card-wrap">
                 <div class="card-header">
@@ -218,19 +272,19 @@ $this->load->view('_partials/header');
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+          <div class="col-lg-4 col-md-6 col-sm-6 col-12">
             <div class="card card-statistic-1 bg-danger">
               <div class="card-wrap">
                 <div class="card-header">
-                  <h4 class="text-white font-weight-bold">Rekening BNI</h4>
+                  <h4 class="text-white font-weight-bold">Rekening BPD</h4>
                 </div>
                 <div class="card-body text-white">
-                  <p>0223074696</p>
+                  <p>0210202257927</p>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+          <!-- <div class="col-lg-3 col-md-6 col-sm-6 col-12">
             <div class="card card-statistic-1 bg-danger">
               <div class="card-wrap">
                 <div class="card-header">
@@ -253,7 +307,7 @@ $this->load->view('_partials/header');
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="row d-flex justify-content-center">
@@ -272,14 +326,14 @@ $this->load->view('_partials/header');
               </div>
             </div>
           </div>
-          <div class="col-xs-12 col-md-6 col-lg-6">
+          <div class="col-xs-12 col-md-8 col-lg-8">
             <div class="card card-statistic-1 bg-info">
               <div class="card-icon">
                 <i class="fas fa-money-bill-alt"></i>
               </div>
               <div class="card-wrap">
                 <div class="card-header">
-                  <h4 class="text-white">Pembayaran SPP Bulan <?= date('m') . ' ' . $ta_aktif ?></h4>
+                  <h4 class="text-white">Pembayaran SPP Bulan <?= bulan_des(date('m')) . ' Tahun Ajaran ' . $ta_aktif ?></h4>
                 </div>
                 <div class="card-body text-white">
                   <?= $checkSPP ?>

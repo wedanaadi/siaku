@@ -57,45 +57,11 @@ $this->load->view('_partials/header');
           <div class="col-xs-12 col-md-6 col-lg-6">
             <div class="card">
               <div class="card-body">
+                <label class="d-block"><strong>Bulan</strong></label>
+                <hr>
                 <div class="col-xs-12 col-md-4 col-lg-4">
                   <div class="form-group">
-                    <label class="d-block">Bulan</label>
-                    <div class="form-check">
-                      <input class="form-check-input" name="bulan[]" value="1" type="checkbox" id="ta_1" disabled>
-                      <label class="form-check-label">
-                        Januari
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" name="bulan[]" value="2" type="checkbox" id="ta_2" disabled>
-                      <label class="form-check-label">
-                        Februari
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" name="bulan[]" value="3" type="checkbox" id="ta_3" disabled>
-                      <label class="form-check-label">
-                        Maret
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" name="bulan[]" value="4" type="checkbox" id="ta_4" disabled>
-                      <label class="form-check-label">
-                        April
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" name="bulan[]" value="5" type="checkbox" id="ta_5" disabled>
-                      <label class="form-check-label">
-                        Mei
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" name="bulan[]" value="6" type="checkbox" id="ta_6" disabled>
-                      <label class="form-check-label">
-                        Juni
-                      </label>
-                    </div>
+                    <span><strong>Semester Ganjil</strong></span>
                     <div class="form-check">
                       <input class="form-check-input" name="bulan[]" value="7" type="checkbox" id="ta_7" disabled>
                       <label class="form-check-label">
@@ -130,6 +96,43 @@ $this->load->view('_partials/header');
                       <input class="form-check-input" name="bulan[]" value="12" type="checkbox" id="ta_12" disabled>
                       <label class="form-check-label">
                         Desember
+                      </label>
+                    </div>
+                    <span><strong>Semester Genap</strong></span>
+                    <div class="form-check">
+                      <input class="form-check-input" name="bulan[]" value="1" type="checkbox" id="ta_1" disabled>
+                      <label class="form-check-label">
+                        Januari
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" name="bulan[]" value="2" type="checkbox" id="ta_2" disabled>
+                      <label class="form-check-label">
+                        Februari
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" name="bulan[]" value="3" type="checkbox" id="ta_3" disabled>
+                      <label class="form-check-label">
+                        Maret
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" name="bulan[]" value="4" type="checkbox" id="ta_4" disabled>
+                      <label class="form-check-label">
+                        April
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" name="bulan[]" value="5" type="checkbox" id="ta_5" disabled>
+                      <label class="form-check-label">
+                        Mei
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" name="bulan[]" value="6" type="checkbox" id="ta_6" disabled>
+                      <label class="form-check-label">
+                        Juni
                       </label>
                     </div>
                   </div>
@@ -225,19 +228,23 @@ $this->load->view('_partials/header');
         url: '<?= base_url() ?>Spp_c/getSiswaTagihanUbah',
         data: {
           ta: $('[name=ta]').val(),
+          taText: $('[name=ta]').find(':selected').text()
         },
         success: function(respon) {
+          $("[name='bulan[]']").prop('checked', false);
           if (respon.siswa.length == 0) {
             $('input:checkbox').prop('checked', false);
             $('#submit').addClass('disabled btn-progress');
             $('.card-footer p').html("");
             $('.card-footer p').html("<strong>Data SPP tidak ditemukan !</strong>");
           } else {
-            for (let index = respon.bulan; index <= 12; index++) {
+            respon.bulan.forEach(index => {
               const name = "#ta_" + index;
               $(name).prop('checked', true);
-            }
-            notifnotime('Perubahan Jumlah Tagihan SPP hanya dapat dilakukan dari bulan ' + month[respon.bulan]);
+            });
+            // for (let index = respon.bulan; index <= 12; index++) {
+            // }
+            notifnotime(respon.message);
             $('.card-footer p').html("");
             $('#submit').removeClass('disabled btn-progress');
           }

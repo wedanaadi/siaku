@@ -85,6 +85,5 @@ function bulan_des($b)
         'November',
         'Desember'
     );
-
     return $bulan[(int)$b];
 }

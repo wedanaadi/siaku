@@ -77,8 +77,33 @@ class Spp_c extends CI_Controller
 
   public function getSiswaTagihanUbah()
   {
+    $taSelect = $this->input->get('ta');
+    $taSplit = explode("/", $this->input->get('taText'));
+    $checkTAaktif = $this->db->query("SELECT * FROM sistem WHERE tahun_ajaran_aktif = '$taSelect' ")->num_rows();
+    if ($checkTAaktif > 0) {
+      $bln = [];
+      if (date('m') > 6) {
+        for ($i = date('m'); $i <= 12; $i++) {
+          array_push($bln, $i);
+        }
+        for ($i = 1; $i <= 6; $i++) {
+          array_push($bln, $i);
+        }
+        // $data['message'] = "Perubahan Jumlah Tagihan SPP hanya dapat dilakukan dari bulan " . bln_only(date('m')) . " " . $taSplit[0] . " sampai Juni" . $taSplit[1];
+      } else {
+        for ($i = date('m'); $i <= 6; $i++) {
+          array_push($bln, $i);
+        }
+      }
+      $data['bulan'] = $bln;
+      $data['message'] = "Perubahan Jumlah Tagihan SPP hanya dapat dilakukan dari bulan " . bulan_des(date('m')) . " " . $taSplit[0] . " sampai Juni " . $taSplit[1];
+    } else {
+      $data['bulan'] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+      $data['message'] = "Perubahan Jumlah Tagihan SPP hanya dapat dilakukan dari bulan Juli " . $taSplit[0] . " sampai Juni " . $taSplit[1];
+    }
+
     $data['siswa'] = $this->Spp_m->getSiswaSPP2($this->input->get('ta'));
-    $data['bulan'] = date('m');
+    $data['bulanSekarang'] = date('m');
     echo json_encode($data);
   }
 
@@ -214,7 +239,7 @@ class Spp_c extends CI_Controller
 
     $data = [
       'status' => $status_spp,
-      'noref' => $this->input->post('noref'),
+      'noref' => $this->input->post('pilih') === 'pay1' ? $this->input->post('noref') . "-" . $this->input->post('bank') : $this->input->post('noref'),
       'bayar' => $this->input->post('bayar')
     ];
     $this->db->trans_start();
@@ -408,7 +433,7 @@ class Spp_c extends CI_Controller
     $data['header'] = $this->cetakHeader();
     $data['lap'] = $this->get_laporan_lunas();
     $html = $this->load->view('spp/cetak_lunas_lap_v', $data, TRUE);
-    $this->create_pdf->load($html, 'Laporan SPP Lunas', 'A4-P');
+    $this->create_pdf->load($html, 'Laporan SPP Lunas', 'Legal-P');
   }
 
   public function cetak_bukti($id)

@@ -19,6 +19,7 @@ class Dashboard_c extends CI_Controller
     $data['title'] = "Dashboard";
     $data['ta_aktif'] = $this->ta_setting();
     $data['cSiswa'] = $this->countSiswa();
+    $data['cUser'] = $this->countUser();
     $data['cPengeluaran'] = $this->countPengeluaran();
     $data['cPengeluaran2'] = $this->countPengeluaran2();
     $data['cSaldo'] = $this->countSaldo();
@@ -38,8 +39,22 @@ class Dashboard_c extends CI_Controller
 
   public function cekSPP()
   {
-    $cek_tagihan = $this->db->query("SELECT * FROM spp WHERE `status` = '0' AND NIS = '" . $this->session->userdata('kodeuser') . "' AND `tahun_ajaran` = (SELECT `tahun_ajaran_aktif` FROM sistem)")->num_rows();
-    $cek_tunggakan = $this->db->query("SELECT * FROM spp WHERE `status` = '0' AND NIS = '" . $this->session->userdata('kodeuser') . "' AND `tahun_ajaran` != (SELECT `tahun_ajaran_aktif` FROM sistem)")->num_rows();
+    $select = $this->db->query("SELECT * FROM `sistem`
+                              INNER JOIN `tahun_ajaran` ta ON ta.`id` = sistem.`tahun_ajaran_aktif`");
+    if ($select->num_rows() > 0) {
+      $tasplit = explode('/', $select->row()->tahun_ajaran);
+    } else {
+      $tasplit = [date('Y'), date('Y')];
+    }
+
+    $i = date('m');
+    if ($i < 7) {
+      $date = $tasplit[1] . '-' . $i;
+    } else {
+      $date = $tasplit[0] . '-' . $i;
+    }
+    $cek_tagihan = $this->db->query("SELECT * FROM spp WHERE `status` = '0' AND NIS = '" . $this->session->userdata('kodeuser') . "' AND DATE_FORMAT(`tgl_trx`,'%Y-%m') = '$date'")->num_rows();
+    $cek_tunggakan = $this->db->query("SELECT * FROM spp WHERE `status` = '0' AND NIS = '" . $this->session->userdata('kodeuser') . "' AND DATE_FORMAT(`tgl_trx`,'%Y-%m') < '$date'")->num_rows();
     $data['tagihan'] = $cek_tagihan;
     $data['tunggakan'] = $cek_tunggakan;
     return $data;
@@ -64,10 +79,21 @@ class Dashboard_c extends CI_Controller
     return $this->db->get('siswa')->num_rows();
   }
 
+  public function countUser()
+  {
+    $this->db->where('is_aktif', 1);
+    return $this->db->get('user')->num_rows();
+  }
+
   public function countPengeluaran()
   {
     $sql = "SELECT sum(biaya) as saldo FROM pengeluaran WHERE is_aktif=1 AND DATE_FORMAT(tgl,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')";
-    return $this->db->query($sql)->row()->saldo;
+    $dateStart = date('Y') . '01';
+    $dateEnd = date('Y') . '12';
+    $sql1Thn = "SELECT sum(biaya) as saldo FROM pengeluaran WHERE is_aktif=1 AND DATE_FORMAT(tgl,'%Y%m') BETWEEN '$dateStart' AND '$dateEnd'";
+    $data['bulanini'] = $this->db->query($sql)->row()->saldo;
+    $data['thn'] = $this->db->query($sql1Thn)->row()->saldo;
+    return $data;
   }
 
   public function countPengeluaran2()
@@ -87,7 +113,12 @@ class Dashboard_c extends CI_Controller
       $date = $tasplit[0] . '-' . $i . '-1';
     }
     $sql = "SELECT sum(biaya) as saldo FROM pengeluaran WHERE is_aktif=1 AND DATE_FORMAT(tgl,'%Y-%m')=DATE_FORMAT('$date','%Y-%m')";
-    return $this->db->query($sql)->row()->saldo;
+    $dateStart = $tasplit[0] . '07';
+    $dateEnd = $tasplit[1] . '06';
+    $sqlThnAjaran = "SELECT SUM(biaya) AS saldo FROM pengeluaran WHERE DATE_FORMAT(`tgl`,'%Y%m') BETWEEN '$dateStart' AND '$dateEnd'";
+    $data['bulanini'] = $this->db->query($sql)->row()->saldo;
+    $data['thn'] = $this->db->query($sqlThnAjaran)->row()->saldo;
+    return $data;
   }
 
   public function countSpp()
@@ -96,7 +127,15 @@ class Dashboard_c extends CI_Controller
             FROM spp
             INNER JOIN siswa s ON s.`NIS` = spp.`NIS`
             WHERE STATUS = '1' AND DATE_FORMAT(`tgl_trx`,'%Y%m') = DATE_FORMAT(NOW(),'%Y%m') AND s.`is_aktif` = '1'";
-    return $this->db->query($sql)->row()->total;
+    $dateStart = date('Y') . '01';
+    $dateEnd = date('Y') . '12';
+    $sqlThn = "SELECT IFNULL(SUM(jumlah),0) AS total 
+              FROM spp
+              INNER JOIN siswa s ON s.`NIS` = spp.`NIS`
+              WHERE STATUS = '1' AND DATE_FORMAT(`tgl_trx`,'%Y%m') BETWEEN '$dateStart' AND '$dateEnd' AND s.`is_aktif` = '1'";
+    $data['bulanini'] = $this->db->query($sql)->row()->total;
+    $data['thn'] = $this->db->query($sqlThn)->row()->total;
+    return $data;
   }
 
   public function countSpp2()
@@ -118,7 +157,15 @@ class Dashboard_c extends CI_Controller
             FROM spp 
             INNER JOIN siswa s ON s.`NIS` = spp.`NIS`
             WHERE STATUS = '1' AND DATE_FORMAT(`tgl_trx`,'%Y%m') = DATE_FORMAT('$date','%Y%m') AND s.`is_aktif` = '1'";
-    return $this->db->query($sql)->row()->total;
+    $dateStart = $tasplit[0] . '07';
+    $dateEnd = $tasplit[1] . '06';
+    $sqlTA = "SELECT IFNULL(SUM(jumlah),0) AS total 
+            FROM spp 
+            INNER JOIN siswa s ON s.`NIS` = spp.`NIS`
+            WHERE STATUS = '1' AND DATE_FORMAT(`tgl_trx`,'%Y%m') BETWEEN '$dateStart' AND '$dateEnd' AND s.`is_aktif` = '1'";
+    $data['bulanini'] = $this->db->query($sql)->row()->total;
+    $data['ta'] = $this->db->query($sqlTA)->row()->total;
+    return $data;
   }
 
   public function countSaldo()
@@ -152,7 +199,23 @@ class Dashboard_c extends CI_Controller
               ) AS tabel2
                 ORDER BY tipe ASC
             ) AS pivot";
-    return $this->db->query($sql)->row()->total;
+    $sqlBlnIni = "SELECT SUM(masuk) AS 'masuk', SUM(keluar) AS 'keluar', keterangan,tgl, SUM(masuk) - SUM(keluar) AS total FROM( 
+                  SELECT tgl,0 AS masuk, biaya AS keluar, keterangan, 2 AS tipe 
+                  FROM pengeluaran 
+                  WHERE DATE_FORMAT(`tgl`,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m') AND `is_aktif`='1' 
+                  UNION 
+                  SELECT tgl, biaya AS masuk, 0 AS keluar, keterangan, 3 AS tipe 
+                  FROM `pemasukan` 
+                  WHERE DATE_FORMAT(`tgl`,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m') AND `is_aktif`='1' 
+                  UNION 
+                  SELECT tgl_trx AS tgl, SUM(jumlah) AS masuk, 0 AS keluar, 'Pembayaran SPP' AS keterangan, 1 AS tipe 
+                  FROM spp 
+                  INNER JOIN siswa s ON s.`NIS` = spp.`NIS` 
+                  WHERE DATE_FORMAT(`tgl_trx`,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m') AND STATUS='1' AND s.`is_aktif` = '1' 
+                ) AS tabel";
+    $data['bulanini'] = $this->db->query($sqlBlnIni)->row()->total;
+    $data['periode'] = $this->db->query($sql)->row()->total;
+    return $data;
   }
 
   public function countSaldo2()
@@ -199,7 +262,23 @@ class Dashboard_c extends CI_Controller
               ) AS tabel2
                 ORDER BY tipe ASC
             ) AS pivot";
-    return $this->db->query($sql)->row()->total;
+    $sqlBlnIni = "SELECT SUM(masuk) AS 'masuk', SUM(keluar) AS 'keluar', keterangan,tgl, SUM(masuk) - SUM(keluar) AS total FROM( 
+                  SELECT tgl,0 AS masuk, biaya AS keluar, keterangan, 2 AS tipe 
+                  FROM pengeluaran 
+                  WHERE DATE_FORMAT(`tgl`,'%Y-%m') = DATE_FORMAT('$date','%Y-%m') AND `is_aktif`='1' 
+                  UNION 
+                  SELECT tgl, biaya AS masuk, 0 AS keluar, keterangan, 3 AS tipe 
+                  FROM `pemasukan` 
+                  WHERE DATE_FORMAT(`tgl`,'%Y-%m') = DATE_FORMAT('$date','%Y-%m') AND `is_aktif`='1' 
+                  UNION 
+                  SELECT tgl_trx AS tgl, SUM(jumlah) AS masuk, 0 AS keluar, 'Pembayaran SPP' AS keterangan, 1 AS tipe 
+                  FROM spp 
+                  INNER JOIN siswa s ON s.`NIS` = spp.`NIS` 
+                  WHERE DATE_FORMAT(`tgl_trx`,'%Y-%m') = DATE_FORMAT('$date','%Y-%m') AND STATUS='1' AND s.`is_aktif` = '1' 
+                ) AS tabel";
+    $data['bulanini'] = $this->db->query($sqlBlnIni)->row()->total;
+    $data['sampaibulan'] = $this->db->query($sql)->row()->total;
+    return $data;
   }
 
   public function tabungansiswa()
