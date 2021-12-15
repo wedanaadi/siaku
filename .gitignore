@@ -1,4 +1,8 @@
 /vendor/
+/assets/img/buktispp/*.jpg
+/assets/img/buktispp/*.png
+/assets/img/foto/*.jpg
+/assets/img/foto/*.png
 composer.json
 composer.lock
 *.sql
