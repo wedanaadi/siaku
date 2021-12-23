@@ -1,6 +1,5 @@
 <?php echo $header;
 $this->load->helper('Tanggal'); ?>
-
 <style>
   .text-center {
     text-align: center;
