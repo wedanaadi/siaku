@@ -85,9 +85,6 @@ $this->load->helper('Tanggal'); ?>
   </thead>
   <tbody>
     <?php
-    // $total = 0;
-    // $masuk = 0;
-    // $keluar = 0;
     $saldo = 0;
     $no = 1;
     foreach ($lap['laporan'] as $row) :
@@ -102,8 +99,6 @@ $this->load->helper('Tanggal'); ?>
       </tr>
     <?php
       $no++;
-      // $masuk += $row->masuk;
-      // $keluar += $row->keluar;
       $saldo += $row->jumlah;
     endforeach;
     ?>
