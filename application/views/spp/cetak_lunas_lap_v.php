@@ -47,28 +47,28 @@ $this->load->helper('Tanggal'); ?>
   <tr>
     <td class="pl-3">BANK BPD</td>
     <td>:</td>
-    <td class="text-right"><?= $lap['bpd'] ?></td>
+    <td class="text-right"><?= number_format($lap['bpd'], '0', ',', '.') ?></td>
   </tr>
   <tr>
     <td class="pl-3">BANK BRI</td>
     <td>:</td>
-    <td class="text-right"><?= $lap['bri'] ?></td>
+    <td class="text-right"><?= number_format($lap['bri'], '0', ',', '.') ?></td>
   </tr>
   <tr>
     <td class="font-bold">Tunai</td>
     <td>:</td>
-    <td class="text-right"><?= $lap['cTunai'] ?></td>
+    <td class="text-right"><?= number_format($lap['tunai'], '0', ',', '.') ?></td>
   </tr>
   <tr>
     <td class="font-bold">dari Tabungan</td>
     <td>:</td>
-    <td class="text-right"><?= $lap['cTabungan'] ?></td>
+    <td class="text-right"><?= number_format($lap['tabungan'], '0', ',', '.') ?></td>
   </tr>
   <tr>
     <td colspan="2" class="font-bold">
       <h4>Jumlah</h4>
     </td>
-    <td class="text-right"><?= $lap['cJumlah'] ?></td>
+    <td class="text-right"><?= number_format($lap['jumlah'], '0', ',', '.') ?></td>
   </tr>
 </table>
 

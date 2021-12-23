@@ -66,28 +66,28 @@ $this->load->view('_partials/header');
                 <tr>
                   <td class="pl-3">BANK BPD</td>
                   <td>:</td>
-                  <td class="text-right"><?= $lap['bpd'] ?></td>
+                  <td class="text-right"><?= number_format($lap['bpd'], '0', ',', '.') ?></td>
                 </tr>
                 <tr>
                   <td class="pl-3">BANK BRI</td>
                   <td>:</td>
-                  <td class="text-right"><?= $lap['bri'] ?></td>
+                  <td class="text-right"><?= number_format($lap['bri'], '0', ',', '.') ?></td>
                 </tr>
                 <tr>
                   <td class="font-weight-bold">Tunai</td>
                   <td>:</td>
-                  <td class="text-right"><?= $lap['cTunai'] ?></td>
+                  <td class="text-right"><?= number_format($lap['tunai'], '0', ',', '.') ?></td>
                 </tr>
                 <tr>
                   <td class="font-weight-bold">dari Tabungan</td>
                   <td>:</td>
-                  <td class="text-right"><?= $lap['cTabungan'] ?></td>
+                  <td class="text-right"><?= number_format($lap['tabungan'], '0', ',', '.') ?></td>
                 </tr>
                 <tr>
                   <td colspan="2" class="font-weight-bold">
                     <h6>Jumlah</h6>
                   </td>
-                  <td class="text-right"><?= $lap['cJumlah'] ?></td>
+                  <td class="text-right"><?= number_format($lap['jumlah'], '0', ',', '.') ?></td>
                 </tr>
               </table>
               <div class="table-responsive">
@@ -320,28 +320,28 @@ $this->load->view('_partials/header');
                 <tr>
                   <td class="pl-3">BANK BPD</td>
                   <td>:</td>
-                  <td class="text-right">${respon.bpd}</td>
+                  <td class="text-right">${respon.bpd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
                 </tr>
                 <tr>
                   <td class="pl-3">BANK BRI</td>
                   <td>:</td>
-                  <td class="text-right">${respon.bri}</td>
+                  <td class="text-right">${respon.bri.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
                 </tr>
                 <tr>
-                  <td>Tunai</td>
+                  <td class="font-weight-bold">Tunai</td>
                   <td>:</td>
-                  <td class="text-right">${respon.cTunai}</td>
+                  <td class="text-right">${respon.tunai.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
                 </tr>
                 <tr>
-                  <td>dari Tabungan</td>
+                  <td class="font-weight-bold">dari Tabungan</td>
                   <td>:</td>
-                  <td class="text-right">${respon.cTabungan}</td>
+                  <td class="text-right">${respon.tabungan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
                 </tr>
                 <tr>
                   <td colspan="2" class="font-weight-bold">
                     <h6>Jumlah</h6>
                   </td>
-                  <td class="text-right">${respon.cJumlah}</td>
+                  <td class="text-right">${respon.jumlah.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
                 </tr>`);
           $.each(respon.laporan, function(k, v) {
             var datedb = v.tgl.split('-');

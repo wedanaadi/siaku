@@ -354,21 +354,28 @@ class Spp_c extends CI_Controller
     $tunai = $this->Spp_m->laporan_lunas($a, $b, $c, 'Tunai');
     $bank = $this->Spp_m->laporan_lunas($a, $b, $c, 'bank');
     $tabungan = $this->Spp_m->laporan_lunas($a, $b, $c, 'Bayar dari tabungan');
-    $data['cTunai'] = count($tunai);
-    $data['cBank'] = count($bank);
-    $data['cTabungan'] = count($tabungan);
-    $data['cJumlah'] = $data['cTunai'] + $data['cBank'] + $data['cTabungan'];
+    $jTunai = 0;
+    $jTabungan = 0;
     $bpd = 0;
     $bri = 0;
     foreach ($bank as $b) {
       if (explode('-', $b->noref)[1] === 'BPD') {
-        $bpd += 1;
+        $bpd += $b->jumlah;
       } else {
-        $bri += 1;
+        $bri += $b->jumlah;
       }
+    }
+    foreach ($tunai as $t) {
+      $jTunai += $t->jumlah;
+    }
+    foreach ($tabungan as $t) {
+      $jTabungan += $t->jumlah;
     }
     $data['bpd'] = $bpd;
     $data['bri'] = $bri;
+    $data['tunai'] = $jTunai;
+    $data['tabungan'] = $jTabungan;
+    $data['jumlah'] = $jTabungan + $jTunai + $bpd + $bri;
 
     return $data;
   }
