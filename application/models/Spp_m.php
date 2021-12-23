@@ -171,8 +171,15 @@ class Spp_m extends CI_Model
     return $this->db->query($sql)->result();
   }
 
-  function laporan_lunas($a, $b, $kelompok)
+  function laporan_lunas($a, $b, $kelompok, $noref = 'all')
   {
+    $whereNoref = '';
+    if ($noref !== 'all' and $noref !== 'bank') {
+      $whereNoref = " AND noref='$noref'";
+    }
+    if ($noref === 'bank') {
+      $whereNoref = " AND noref !='Tunai' AND noref != 'Bayar dari tabungan'";
+    };
     if ($kelompok !== 'semua') {
       $lanjut = " AND k.`id`='$kelompok'";
     } else {
@@ -185,7 +192,8 @@ class Spp_m extends CI_Model
             INNER JOIN siswa s ON s.`NIS` = spp.`NIS`
             INNER JOIN tahun_ajaran ta ON ta.`id` = spp.`tahun_ajaran` 
             INNER JOIN kelompok k ON k.`id` = s.`id_kelompok`
-            WHERE spp.`status` = '1' AND tgl_trx BETWEEN '$a' AND '$b' $lanjut AND s.`is_aktif` = '1'
+            WHERE spp.`status` = '1' AND tgl_trx BETWEEN '$a' AND '$b' $lanjut AND s.`is_aktif` = '1' 
+            $whereNoref
             ORDER BY NIS, bulan, tahun_ajaran,nama_kelompok";
     return $this->db->query($sql)->result();
   }

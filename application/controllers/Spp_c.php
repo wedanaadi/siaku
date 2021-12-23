@@ -351,6 +351,24 @@ class Spp_c extends CI_Controller
     $data['awal'] = tgl_only($a);
     $data['akhir'] = tgl_only($b);
     $data['laporan'] = $this->Spp_m->laporan_lunas($a, $b, $c);
+    $tunai = $this->Spp_m->laporan_lunas($a, $b, $c, 'Tunai');
+    $bank = $this->Spp_m->laporan_lunas($a, $b, $c, 'bank');
+    $tabungan = $this->Spp_m->laporan_lunas($a, $b, $c, 'Bayar dari tabungan');
+    $data['cTunai'] = count($tunai);
+    $data['cBank'] = count($bank);
+    $data['cTabungan'] = count($tabungan);
+    $data['cJumlah'] = $data['cTunai'] + $data['cBank'] + $data['cTabungan'];
+    $bpd = 0;
+    $bri = 0;
+    foreach ($bank as $b) {
+      if (explode('-', $b->noref)[1] === 'BPD') {
+        $bpd += 1;
+      } else {
+        $bri += 1;
+      }
+    }
+    $data['bpd'] = $bpd;
+    $data['bri'] = $bri;
 
     return $data;
   }

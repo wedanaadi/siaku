@@ -2,6 +2,13 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 $this->load->view('_partials/header');
 ?>
+<style>
+  @media only screen and (min-width: 720px) {
+    #tabelJenis {
+      width: 20% !important;
+    }
+  }
+</style>
 <div class="main-content">
   <section class="section">
     <div class="section-header">
@@ -45,6 +52,44 @@ $this->load->view('_partials/header');
                   <button id="pilih" class="btn btn-primary"> <i class="fas fa-search"></i> Pilih</button>
                 </div>
               </div>
+              <hr>
+              <table class="mb-3" id="tabelJenis" style="width: 100%;">
+                <tr class="font-weight-bold">
+                  <td colspan="3">
+                    <h5>Jenis Pembayaran</h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">BANK</td>
+                  <td>:</td>
+                </tr>
+                <tr>
+                  <td class="pl-3">BANK BPD</td>
+                  <td>:</td>
+                  <td class="text-right"><?= $lap['bpd'] ?></td>
+                </tr>
+                <tr>
+                  <td class="pl-3">BANK BRI</td>
+                  <td>:</td>
+                  <td class="text-right"><?= $lap['bri'] ?></td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">Tunai</td>
+                  <td>:</td>
+                  <td class="text-right"><?= $lap['cTunai'] ?></td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">dari Tabungan</td>
+                  <td>:</td>
+                  <td class="text-right"><?= $lap['cTabungan'] ?></td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="font-weight-bold">
+                    <h6>Jumlah</h6>
+                  </td>
+                  <td class="text-right"><?= $lap['cJumlah'] ?></td>
+                </tr>
+              </table>
               <div class="table-responsive">
                 <table class="table table-striped" id="laporan_tabel" style="width:100%">
                   <thead>
@@ -256,14 +301,50 @@ $this->load->view('_partials/header');
           kelompok
         },
         success: function(respon) {
+          console.log(respon);
           $('#labelperiode').text("Periode : " + respon.awal + " s/d " + respon.akhir);
           if (respon.laporan.length === 0) {
             notifnotime("Laporan Periode : " + respon.awal + " s/d " + respon.akhir + ' Tidak Ditemukan');
           }
           tabel.api().clear().draw();
+          $('#tabelJenis tr').remove();
+          $('#tabelJenis').html(`<tr class="font-weight-bold">
+                  <td colspan="3">
+                    <h5>Jenis Pembayaran</h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">BANK</td>
+                  <td>:</td>
+                </tr>
+                <tr>
+                  <td class="pl-3">BANK BPD</td>
+                  <td>:</td>
+                  <td class="text-right">${respon.bpd}</td>
+                </tr>
+                <tr>
+                  <td class="pl-3">BANK BRI</td>
+                  <td>:</td>
+                  <td class="text-right">${respon.bri}</td>
+                </tr>
+                <tr>
+                  <td>Tunai</td>
+                  <td>:</td>
+                  <td class="text-right">${respon.cTunai}</td>
+                </tr>
+                <tr>
+                  <td>dari Tabungan</td>
+                  <td>:</td>
+                  <td class="text-right">${respon.cTabungan}</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="font-weight-bold">
+                    <h6>Jumlah</h6>
+                  </td>
+                  <td class="text-right">${respon.cJumlah}</td>
+                </tr>`);
           $.each(respon.laporan, function(k, v) {
             var datedb = v.tgl.split('-');
-            console.log(datedb);
             tabel.api().row.add([
               v.nama_siswa,
               v.nama_kelompok,
